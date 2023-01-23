@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-
+//Rishabh Rajpurohit | 2023
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     var CITY: String = "delhi,in"
