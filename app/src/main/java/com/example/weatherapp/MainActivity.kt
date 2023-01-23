@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -8,7 +9,11 @@ import android.os.AsyncTask
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
@@ -19,10 +24,16 @@ import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
-    val CITY: String = "delhi,in"
+    var CITY: String = "delhi,in"
     val APIKEY: String = BuildConfig.APK_KEY
+
+    private lateinit var updateCityBtn: Button
+    private lateinit var updateCityField: EditText
+
 
     private lateinit var refreshLayout: SwipeRefreshLayout
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,13 +50,36 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
+        //This is used to add City Input functionality
+        updateCityField = findViewById<EditText?>(R.id.updateCityField)
+        updateCityField.hint = "Enter City Name"
+        updateCityBtn = findViewById(R.id.updateCityBtn)
+        updateCityBtn.setOnClickListener {
+            var city = findViewById<EditText>(R.id.updateCityField).text.toString()
+            if(city!=null) CITY=city
+            updateCityField.clearFocus()
+            weatherTask().execute()
+            val inputManager: InputMethodManager =getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0)
+            updateCityField.setText("")
+        }
+
         //This is used to add swipe refresh functionality
         refreshLayout = findViewById(R.id.swipe_refresh_layout)
         refreshLayout.setOnRefreshListener {
             weatherTask().execute()
+            updateCityField.setText("")
         }
         //This is the initial call of the app.
         weatherTask().execute()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        weatherTask().execute()
+        updateCityField.setText("")
     }
     inner class weatherTask() : AsyncTask<String, Void, String>()
     {
@@ -122,6 +156,7 @@ class MainActivity : AppCompatActivity() {
                 findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
                 //findViewById<TextView>(R.id.errortext).text = e.toString() //this logs the error
                 findViewById<TextView>(R.id.errortext).visibility = View.VISIBLE
+
             }
             refreshLayout.isRefreshing = false
         }

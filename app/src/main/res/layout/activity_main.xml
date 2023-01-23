@@ -21,9 +21,43 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <EditText
+                    android:id="@+id/updateCityField"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Enter City name"
+                    android:background="@color/gradient_end"
+                    android:textColorHint="#9E9E9E"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:padding="15dp"
+                    android:singleLine="true"
+                    android:inputType="textAutoCorrect"
+                    android:imeOptions="actionDone" />
+
+                <Button
+                    android:id="@+id/updateCityBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:text="FETCH"
+                    android:padding="9dp"
+                    android:textColor="#ffffff"
+                    android:background="@color/gradient_start"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/addressContainer"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:layout_marginTop="80dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
